@@ -27,12 +27,17 @@ export default function Admin({ onLogout, onGuest, onPreview }) {
       const r = await fetch(`/api/invitacion.png?n=${encodeURIComponent(g.name)}`);
       if (!r.ok) { const j = await r.json().catch(() => ({})); throw new Error(j.error || 'Error ' + r.status); }
       const blob = await r.blob();
-      setPic({ name: g.name, blob, url: URL.createObjectURL(blob) });
+        setPic({ name: g.name, blob, url: URL.createObjectURL(blob),
+        texto: `Hola ${g.name}, estás dentro. El 13 y 14 de diciembre en Casa Náutica, Santa Rosa (Ancón). Ingreso 2 pm, salida 11 am. Cuota de la casa: S/ ${ev.houseFee}.` });
     } catch (e) { alert('No se pudo generar la imagen: ' + e.message); }
   }
   const cerrarPic = () => { URL.revokeObjectURL(pic.url); setPic(null); };
   const copiarPic = async () => {
     try { await navigator.clipboard.write([new ClipboardItem({ 'image/png': pic.blob })]); alert('Imagen copiada. Pégala en el chat con Ctrl+V.'); }
+    catch (e) { alert('No se pudo copiar: ' + e.message); }
+  };
+    const copiarTexto = async () => {
+    try { await navigator.clipboard.writeText(pic.texto); alert('Texto copiado. Pégalo en el chat con Ctrl+V.'); }
     catch (e) { alert('No se pudo copiar: ' + e.message); }
   };
   const descargarPic = () => {
@@ -67,7 +72,7 @@ export default function Admin({ onLogout, onGuest, onPreview }) {
             <td><Cell v={g.name} onSave={v => edit(g.id, { name: v })} /></td>
             <td><div className="acts"><Cell v={g.phone} onSave={v => edit(g.id, { phone: v.replace(/\D/g, '') })} />
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 16, marginLeft: 18 }}>
-                {g.phone && <a target="_blank" rel="noreferrer" title="Escribir por WhatsApp" href={wa(g.phone, `Hola ${g.name}, estás dentro. El 13 y 14 de diciembre en Casa Náutica, Santa Rosa (Ancón). Ingreso 2 pm, salida 11 am. Cuota de la casa: S/ ${ev.houseFee}.`)}><MessageCircle size={20} /></a>}
+                {g.phone && <a target="_blank" rel="noreferrer" title="Escribir por WhatsApp" href={wa(g.phone, `Hola ${g.name.replace(/[^\p{L}\p{N}\s.'-]/gu, '').trim() || g.name}, estás dentro. El 13 y 14 de diciembre en Casa Náutica, Santa Rosa (Ancón). Ingreso 2 pm, salida 11 am. Cuota de la casa: S/ ${ev.houseFee}.`)}><MessageCircle size={20} /></a>}
                 {g.phone && g.going && <button className="link" title="Enviar invitación con imagen" onClick={() => resend(g)}><Send size={20} /></button>}
                 {g.phone && g.going && <button className="link" title="Ver invitación con imagen" onClick={() => verImagen(g)}><ImageIcon size={20} /></button>}
               </span></div></td>
@@ -91,6 +96,7 @@ export default function Admin({ onLogout, onGuest, onPreview }) {
         <img src={pic.url} alt="Invitación" style={{ width: '100%', borderRadius: 12 }} />
         <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginTop: 12, flexWrap: 'wrap' }}>
           <button className="yes" onClick={copiarPic}>Copiar imagen</button>
+          <button className="yes" onClick={copiarTexto}>Copiar texto</button>
           <button className="yes" onClick={descargarPic}>Descargar</button>
           <button className="link" onClick={cerrarPic}>Cerrar</button>
         </div>
