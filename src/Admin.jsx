@@ -20,8 +20,8 @@ export default function Admin({ onLogout, onGuest, onPreview }) {
   const del = async g => { if (confirm('¿Eliminar a ' + g.name + '?')) { await call('/api/admin/guests/' + g.id, { method: 'DELETE' }); load(); } };
   const add = async () => { await call('/api/admin/guests', { method: 'POST', body: JSON.stringify({ name: nn }) }); setNn(''); load(); };
   const saveFin = async () => { await call('/api/admin/event', { method: 'PUT', body: JSON.stringify(fin) }); load(); };
-  if (!info) return <p className="center">Cargando...</p>;
   const resend = async g => { try { await call('/api/admin/guests/' + g.id + '/whatsapp', { method: 'POST' }); alert('Invitación enviada a ' + g.name); } catch (e) { alert(e.message); } };
+  if (!info) return <p className="center">Cargando...</p>;
   const ev = info.event, yes = list.filter(g => g.going), cap = info.cap;
   const paid = yes.filter(g => g.paidHouse), unpaid = yes.filter(g => !g.paidHouse);
   const houseIn = paid.length * ev.houseFee, extraIn = yes.filter(g => g.paidExtra).length * ev.extraFee;
