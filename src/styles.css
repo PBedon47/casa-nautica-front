@@ -254,3 +254,14 @@ body::before{background:linear-gradient(#bfeeff55,#ffffff33),url(/agua.jpg) cent
 .fin-pay{min-width:0}
 .fin-pay h2{margin-top:0}
 @media(max-width:900px){.fin-grid{grid-template-columns:1fr}}
+.yes {
+  transition: filter .15s ease, transform .1s ease, box-shadow .15s ease;
+}
+.yes:hover:not(:disabled) {
+  filter: brightness(.85);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+}
+.yes:active:not(:disabled) {
+  filter: brightness(.7);
+  transform: scale(.97);
+}
