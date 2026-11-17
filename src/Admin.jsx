@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { LayoutDashboard, Users, Wallet, Trash2, Plus, Save, MessageCircle, LogOut, Eye, Home, UserCheck, UserX, Banknote, Utensils, CircleCheck, Clock, Send, Image as ImageIcon } from 'lucide-react';
-import { call, wa } from './lib';
+import { call, wa, API } from './lib';
 
 const Cell = ({ v, onSave }) => <input defaultValue={v} onBlur={e => e.target.value !== String(v) && onSave(e.target.value)} />;
 const Stat = ({ icon: I, t, v, s }) => <div className="card stat"><I size={26} className="ic" /><small>{t}</small><h2>{v}</h2>{s && <small>{s}</small>}</div>;
@@ -24,7 +24,7 @@ export default function Admin({ onLogout, onGuest, onPreview }) {
 
   async function verImagen(g) {
     try {
-      const r = await fetch(`/api/invitacion.png?n=${encodeURIComponent(g.name)}`);
+        const r = await fetch(`${API}/api/invitacion.png?n=${encodeURIComponent(g.name)}`);
       if (!r.ok) { const j = await r.json().catch(() => ({})); throw new Error(j.error || 'Error ' + r.status); }
       const blob = await r.blob();
         setPic({ name: g.name, blob, url: URL.createObjectURL(blob),
