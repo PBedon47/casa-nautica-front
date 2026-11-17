@@ -6,6 +6,7 @@ import Deco from './Deco';
 
 const DRIVE = 'https://drive.google.com/drive/folders/1gJngPnZsAe_HTmjJ8CIgV47sD1bHpYh_?usp=sharing';
 const MAPS = 'https://maps.app.goo.gl/8hsJjqTqzrU5uURi8';
+const SITE = 'https://casa-nautica-front.vercel.app';
 const MAP_EMBED = ''; // opcional: en Google Maps > Compartir > Insertar un mapa, pega aquí solo el link del src
 const PAGES = [['inicio', 'Inicio', Home], ['casa', 'La casa', Waves], ['ubicacion', 'Ubicación', MapPin], ['asistencia', 'Confirmar', ClipboardCheck], ['participantes', 'Participantes', Users], ['votos', 'Votaciones', Vote]];
 const FEATURES = [[Waves, 'Piscina'], [Flame, 'Terraza con parrilla'], [Sofa, 'Sala'], [Tv, 'Smart TV'], [Wifi, 'WiFi'], [Volume2, 'Equipo de sonido'], [BedDouble, '4 habitaciones'], [ShowerHead, '2 baños y 1 ducha'], [Utensils, 'Cocina y refrigerador'], [Car, 'Estacionamiento externo'], [PawPrint, 'Pet friendly']];
@@ -44,7 +45,7 @@ export default function Guest({ sess, onLogout, onBack }) {
       <header className="hero"><div className="hero-text"><p className="tag">¡Bienvenido{sess.name ? `, ${sess.name.split(' ')[0]}` : ''}!</p><h1>Casa Náutica</h1><h2>13 y 14 de Diciembre</h2>
         <p>Sol, piscina y buena vibra en Santa Rosa. Confirma tu asistencia y sé parte del planazo.</p><Count />
         <button className="btn" onClick={() => go('asistencia')}>Quiero asistir</button>
-        <a className="btn alt" target="_blank" rel="noreferrer" href={`https://wa.me/?text=${encodeURIComponent('Casa Náutica, 13 y 14 de diciembre. Entra aquí: ' + location.origin)}`}><Share2 size={18} /> Compartir</a></div>
+        <a className="btn alt" target="_blank" rel="noreferrer" href={`https://wa.me/?text=${encodeURIComponent('Casa Náutica, 13 y 14 de diciembre. Entra aquí: ' + SITE)}`}><Share2 size={18} /> Compartir</a></div>
         <div className="pol"><img className="polaroid" src="/noche.jpg" alt="Casa Náutica de noche" onError={x => (x.target.style.display = 'none')} /></div>
         <span className="hd hd1">🕶️</span><span className="hd hd2">🍍</span><span className="hd hd3">🕶️</span><span className="hd hd4">🥥</span><span className="hd hd5">🎉</span></header>
       <section className="grid">
