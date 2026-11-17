@@ -1,72 +1,37 @@
-import { useState } from 'react';
-import { Home, Lock, ArrowLeft, User, KeyRound, PartyPopper } from 'lucide-react';
-import { API, getSess, setSess } from './lib';
-import Guest from './Guest';
-import Admin from './Admin';
+export const API = import.meta.env.VITE_API || '';
 
-const post = async (path, body, headers = {}) => {
-  const r = await fetch(API + path, { method: 'POST', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify(body || {}) });
-  const d = await r.json().catch(() => ({}));
+export const getSess = () => { try { return JSON.parse(localStorage.getItem('sess')); } catch { return null; } };
+export const setSess = s => (s ? localStorage.setItem('sess', JSON.stringify(s)) : localStorage.removeItem('sess'));
+
+export const call = async (path, opts = {}) => {
+  const s = getSess();
+  const h = { 'Content-Type': 'application/json', ...(s?.role === 'admin' && { Authorization: 'Bearer ' + s.token }), ...(s?.role === 'guest' && { 'x-invite-code': s.code }) };
+  const r = await fetch(API + path, { ...opts, headers: { ...h, ...opts.headers } });
+  const d = await r.json();
+  if (r.status === 401 && s) { setSess(null); location.reload(); }
   if (!r.ok) throw new Error(d.error || 'Error');
   return d;
 };
-const cap = s => s.trim().replace(/\b\p{L}/gu, c => c.toUpperCase());
 
-export default function App() {
-  const [sess, setS] = useState(getSess());
-  const [view, setView] = useState('admin');
-  const [screen, setScreen] = useState('guest'); // guest | admin
-  const [f, setF] = useState({ name: '', code: '', user: '', pass: '' });
-  const [err, setErr] = useState('');
-  const [busy, setBusy] = useState(false);
-  const set = k => e => setF({ ...f, [k]: e.target.value });
-  const save = s => { setSess(s); setS(s); setErr(''); setView('admin'); };
-  const logout = () => { setSess(null); setS(null); setScreen('guest'); };
-  const go = fn => async () => { setBusy(true); setErr(''); try { await fn(); } catch (e) { setErr(e.message); } setBusy(false); };
+export const MUSIC = ['Reggaetón', 'Salsa', 'Cumbia', 'Rock', 'Pop', 'Electrónica', 'Variado'];
+export const FOOD = ['Parrilla', 'Pollo a la brasa', 'Hamburguesas', 'Anticuchos'];
+export const wa = (phone, text) => `https://wa.me/${phone.length === 9 ? '51' + phone : phone}?text=${encodeURIComponent(text)}`;
 
-  const enterGuest = go(async () => {
-    if (!f.name.trim()) throw new Error('Escribe tu nombre');
-    await post('/api/login', {}, { 'x-invite-code': f.code });
-    save({ role: 'guest', code: f.code, name: cap(f.name) });
-  });
-  const enterAdmin = go(async () => {
-    const d = await post('/api/admin/login', { user: f.user, pass: f.pass });
-    save({ role: 'admin', token: d.token, name: 'Admin' });
-  });
-
-  if (sess?.role === 'guest') return <Guest sess={sess} onLogout={logout} />;
-  if (sess?.role === 'admin') return view === 'admin'
-    ? <Admin sess={sess} onLogout={logout} onGuest={() => setView('guest')} />
-    : <Guest sess={sess} onBack={() => setView('admin')} />;
-
-  const isAdm = screen === 'admin';
-  const onEnter = fn => e => e.key === 'Enter' && fn();
-
-  return (
-    <div className={'lg' + (isAdm ? ' adm' : '')}>
-      {isAdm
-        ? <button className="lg-corner" onClick={() => { setScreen('guest'); setErr(''); }}><ArrowLeft size={18} /> Volver</button>
-        : <button className="lg-corner" title="Administrador" onClick={() => { setScreen('admin'); setErr(''); }}><Lock size={18} /></button>}
-
-      <div className="lg-card">
-        <div className="lg-ico">{isAdm ? <Lock size={30} /> : <Home size={30} />}</div>
-        {isAdm ? (<>
-          <h1>Panel de administrador</h1>
-          <p>Gestiona invitados, cuotas y la información del evento.</p>
-          <label><User size={18} /><input placeholder="Usuario" value={f.user} onChange={set('user')} autoComplete="username" /></label>
-          <label><KeyRound size={18} /><input type="password" placeholder="Contraseña" value={f.pass} onChange={set('pass')} onKeyDown={onEnter(enterAdmin)} autoComplete="current-password" /></label>
-          {err && <small className="lg-err">{err}</small>}
-          <button className="lg-btn" disabled={busy} onClick={enterAdmin}>{busy ? 'Entrando...' : 'Entrar como admin'}</button>
-        </>) : (<>
-          <span className="lg-pill"><PartyPopper size={16} /> 13 y 14 de Diciembre</span>
-          <h1>Casa Náutica</h1>
-          <p>Santa Rosa, Ancón. Escribe tu nombre y el código que te enviaron para entrar al planazo.</p>
-          <label><User size={18} /><input placeholder="Tu nombre" value={f.name} onChange={set('name')} autoComplete="given-name" /></label>
-          <label><KeyRound size={18} /><input placeholder="Código de invitación" value={f.code} onChange={set('code')} onKeyDown={onEnter(enterGuest)} autoCapitalize="characters" /></label>
-          {err && <small className="lg-err">{err}</small>}
-          <button className="lg-btn" disabled={busy} onClick={enterGuest}>{busy ? 'Entrando...' : 'Entrar'}</button>
-        </>)}
-      </div>
-    </div>
-  );
+// Usa public/invitacion.png y le agrega abajo el nombre del invitado
+export async function makeCard(name, fee) {
+  await document.fonts.load('700 30px Fredoka');
+  const img = await new Promise(r => { const i = new Image(); i.onload = () => r(i); i.onerror = () => r(null); i.src = '/invitacion.png'; });
+  const W = img?.naturalWidth || 750, H = img?.naturalHeight || 1000, B = 170;
+  const c = document.createElement('canvas'); c.width = W; c.height = H + B;
+  const x = c.getContext('2d');
+  x.fillStyle = '#12063a'; x.fillRect(0, 0, W, H + B);
+  x.textAlign = 'center';
+  if (img) x.drawImage(img, 0, 0);
+  else { x.fillStyle = '#fff'; x.font = '700 60px Fredoka, sans-serif'; x.fillText('¡Registro Exitoso!', W / 2, 300); x.fillText('13 y 14 de Diciembre', W / 2, 400); }
+  x.strokeStyle = '#ffd23f'; x.lineWidth = 4; x.beginPath(); x.moveTo(40, H + 8); x.lineTo(W - 40, H + 8); x.stroke();
+  x.fillStyle = '#ffd23f'; x.font = '700 42px Fredoka, sans-serif'; x.fillText(name, W / 2, H + 66);
+  x.fillStyle = '#fff'; x.font = '400 26px Fredoka, sans-serif';
+  x.fillText('Casa Náutica · Santa Rosa, Ancón · Ingreso 2 pm', W / 2, H + 108);
+  x.fillText(`Cuota de la casa: S/ ${fee}`, W / 2, H + 144);
+  return c.toDataURL('image/jpeg', 0.85);
 }
