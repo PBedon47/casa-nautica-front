@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Home, Lock, ArrowLeft, User, KeyRound, PartyPopper } from 'lucide-react';
 import { API, getSess, setSess } from './lib';
 import Guest from './Guest';
@@ -23,6 +23,7 @@ export default function App() {
   const save = s => { setSess(s); setS(s); setErr(''); setView('admin'); };
   const logout = () => { setSess(null); setS(null); setScreen('guest'); };
   const go = fn => async () => { setBusy(true); setErr(''); try { await fn(); } catch (e) { setErr(e.message); } setBusy(false); };
+  useEffect(() => { fetch(API + '/health').catch(() => {}); }, []);
 
   const enterGuest = go(async () => {
     if (!f.name.trim()) throw new Error('Escribe tu nombre');
