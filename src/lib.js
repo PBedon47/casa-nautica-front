@@ -27,7 +27,7 @@ export async function makeCard(name, fee) {
   x.fillStyle = '#12063a'; x.fillRect(0, 0, W, H + B);
   x.textAlign = 'center';
   if (img) x.drawImage(img, 0, 0);
-  else { x.fillStyle = '#fff'; x.font = '700 60px Fredoka, sans-serif'; x.fillText('¡Registro Exitoso!', W / 2, 300); x.fillText('13 y 14 de Diciembre', W / 2, 400); }
+  else { x.fillStyle = '#fff'; x.font = '700 60px Fredoka, sans-serif'; x.fillText('¡Registro Exitoso!', W / 2, 300); x.fillText('12 y 13 de Diciembre', W / 2, 400); }
   x.strokeStyle = '#ffd23f'; x.lineWidth = 4; x.beginPath(); x.moveTo(40, H + 8); x.lineTo(W - 40, H + 8); x.stroke();
   x.fillStyle = '#ffd23f'; x.font = '700 42px Fredoka, sans-serif'; x.fillText(name, W / 2, H + 66);
   x.fillStyle = '#fff'; x.font = '400 26px Fredoka, sans-serif';

@@ -42,14 +42,14 @@ export default function Guest({ sess, onLogout, onBack }) {
   if (d) {
     const { event: e, cap, going, votes } = d;
     body = page === 'inicio' ? (<>
-      <header className="hero"><div className="hero-text"><p className="tag">¡Bienvenido{sess.name ? `, ${sess.name.split(' ')[0]}` : ''}!</p><h1>Casa Náutica</h1><h2>13 y 14 de Diciembre</h2>
+      <header className="hero"><div className="hero-text"><p className="tag">¡Bienvenido{sess.name ? `, ${sess.name.split(' ')[0]}` : ''}!</p><h1>Casa Náutica</h1><h2>12 y 13 de Diciembre</h2>
         <p>Sol, piscina y buena vibra en Santa Rosa. Confirma tu asistencia y sé parte del planazo.</p><Count />
         <button className="btn" onClick={() => go('asistencia')}>Quiero asistir</button>
-        <a className="btn alt" target="_blank" rel="noreferrer" href={`https://wa.me/?text=${encodeURIComponent('Casa Náutica, 13 y 14 de diciembre. Entra aquí: ' + SITE)}`}><Share2 size={18} /> Compartir</a></div>
+        <a className="btn alt" target="_blank" rel="noreferrer" href={`https://wa.me/?text=${encodeURIComponent('Casa Náutica, 12 y 13 de diciembre. Entra aquí: ' + SITE)}`}><Share2 size={18} /> Compartir</a></div>
         <div className="pol"><img className="polaroid" src="/noche.jpg" alt="Casa Náutica de noche" onError={x => (x.target.style.display = 'none')} /></div>
         <span className="hd hd1">🕶️</span><span className="hd hd2">🍍</span><span className="hd hd3">🕶️</span><span className="hd hd4">🥥</span><span className="hd hd5">🎉</span></header>
       <section className="grid">
-        <Info icon={CalendarDays} t="Fechas" v="13 y 14 Dic · Ingreso 2 pm" /><Info icon={MapPin} t="Lugar" v="Santa Rosa, Ancón" />
+        <Info icon={CalendarDays} t="Fechas" v="12 y 13 Dic · Ingreso 2 pm" /><Info icon={MapPin} t="Lugar" v="Santa Rosa, Ancón" />
         <Info icon={Wallet} t="Cuota de la casa" v={`S/ ${e.houseFee} por persona`} /><Info icon={Utensils} t="Comida y tragos" v={e.extraFee ? `S/ ${e.extraFee} por persona` : 'Monto por definir'} /></section>
       <section className="card"><h3>Cupos: {going.length} / {cap} confirmados</h3><Bar p={(going.length / cap) * 100} /></section></>)
     : page === 'casa' ? (<>

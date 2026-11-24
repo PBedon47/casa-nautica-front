@@ -59,7 +59,7 @@ export default function App() {
           {err && <small className="lg-err">{err}</small>}
           <button className="lg-btn" disabled={busy} onClick={enterAdmin}>{busy ? 'Entrando...' : 'Entrar como admin'}</button>
         </>) : (<>
-          <span className="lg-pill"><PartyPopper size={16} /> 13 y 14 de Diciembre</span>
+          <span className="lg-pill"><PartyPopper size={16} /> 12 y 13 de Diciembre</span>
           <h1>Casa Náutica</h1>
           <p>Santa Rosa, Ancón. Escribe tu nombre y el código que te enviaron para entrar al planazo.</p>
           <label><User size={18} /><input placeholder="Tu nombre" value={f.name} onChange={set('name')} autoComplete="given-name" /></label>

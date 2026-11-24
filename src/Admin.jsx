@@ -67,7 +67,7 @@ export default function Admin({ onLogout, onGuest, onPreview }) {
             <td><Cell v={g.name} onSave={v => edit(g.id, { name: v })} /></td>
             <td><div className="acts"><Cell v={g.phone} onSave={v => edit(g.id, { phone: v.replace(/\D/g, '') })} />
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 16, marginLeft: 18 }}>
-                {g.phone && <a target="_blank" rel="noreferrer" title="Escribir por WhatsApp" href={wa(g.phone, `Hola ${g.name.replace(/[^\p{L}\p{N}\s.'-]/gu, '').trim() || g.name}, estás dentro. El 13 y 14 de diciembre en Casa Náutica, Santa Rosa (Ancón). Ingreso 2 pm, salida 11 am. Cuota de la casa: S/ ${ev.houseFee}.`)}><MessageCircle size={20} /></a>}
+                {g.phone && <a target="_blank" rel="noreferrer" title="Escribir por WhatsApp" href={wa(g.phone, `Hola ${g.name.replace(/[^\p{L}\p{N}\s.'-]/gu, '').trim() || g.name}, estás dentro. El 12 y 13 de diciembre en Casa Náutica, Santa Rosa (Ancón). Ingreso 2 pm, salida 11 am. Cuota de la casa: S/ ${ev.houseFee}.`)}><MessageCircle size={20} /></a>}
                 {g.phone && g.going && <button className="link" title="Enviar invitación con imagen" onClick={() => resend(g)}><Send size={20} /></button>}
                 {g.phone && g.going && <button className="link" title="Ver invitación con imagen" onClick={() => verImagen(g)}><ImageIcon size={20} /></button>}
               </span></div></td>
